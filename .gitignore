@@ -1,5 +1,6 @@
 # Visual Studio 2015 user specific files
 .vs/
+.idea/
 
 # Compiled Object files
 *.slo
@@ -48,6 +49,9 @@ SourceArt/**/*.tga
 # Binary Files
 Binaries/*
 Plugins/*/Binaries/*
+Plugins/Developer/RiderLink/Binaries
+Plugins/Developer/RiderLink/Intermediate
+Plugins/Developer/RiderLink/*
 
 # Builds
 Build/*
@@ -72,3 +76,8 @@ Plugins/*/Intermediate/*
 
 # Cache files for the editor to use
 DerivedDataCache/*
+
+#World Partitions
+Content/__ExternalObjects__/*
+Content/__ExternalActors__/*
+Config/DefaultEditorSettings.ini
