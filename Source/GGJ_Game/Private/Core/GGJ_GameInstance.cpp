@@ -3,6 +3,8 @@
 
 #include "Core/GGJ_GameInstance.h"
 #include "WebSocketsModule.h"
+#include "JsonObjectConverter.h"
+#include "Dom/JsonObject.h"
 
 void UGGJ_GameInstance::Init() 
 {
@@ -17,7 +19,7 @@ void UGGJ_GameInstance::Init()
 void UGGJ_GameInstance::OnStartGame()
 {
 
-	WebSocket = FWebSocketsModule::Get().CreateWebSocket("ws://localhost:4040");
+	WebSocket = FWebSocketsModule::Get().CreateWebSocket("ws://127.0.0.1:4041/connect");
 
 	GEngine->AddOnScreenDebugMessage(-1, -15.0f, FColor::Green, "Successfully connected");
 	UE_LOG(LogTemp, Warning, TEXT("Hello World!"));
@@ -28,6 +30,19 @@ void UGGJ_GameInstance::OnStartGame()
 		{
 			GEngine->AddOnScreenDebugMessage(-1, -15.0f, FColor::Green, "Successfully connected");
 			UE_LOG(LogTemp, Warning, TEXT("Successfully connected"));
+
+			// Create a JSON object
+			TSharedPtr<FJsonObject> JsonObject = MakeShareable(new FJsonObject);
+
+			// Add key-value pairs to the JSON object
+			JsonObject->SetStringField(TEXT("message_type"), TEXT("create_lobby"));
+
+			// Convert the JSON object to a string
+			FString JsonString;
+			TSharedRef<TJsonWriter<TCHAR>> JsonWriter = TJsonWriterFactory<TCHAR>::Create(&JsonString);
+			FJsonSerializer::Serialize(JsonObject.ToSharedRef(), JsonWriter);
+
+			WebSocket->Send(*JsonString);
 
 			PlayerCount++;
 		});
