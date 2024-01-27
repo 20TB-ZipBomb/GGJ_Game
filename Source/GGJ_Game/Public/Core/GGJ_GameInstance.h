@@ -25,7 +25,7 @@ class GGJ_GAME_API UGGJ_GameInstance : public UGameInstance
 		UFUNCTION(BlueprintCallable, Category = "WebSocket")
 		void OnStartGame();
 
-		UPROPERTY(BlueprintReadWrite, Category = "UI")
+		UPROPERTY(BlueprintReadWrite, Category = "WebSocket")
 		int PlayerCount;
 
 		TSharedPtr<IWebSocket> WebSocket;

@@ -17,7 +17,7 @@ void UGGJ_GameInstance::Init()
 void UGGJ_GameInstance::OnStartGame()
 {
 
-	WebSocket = FWebSocketsModule::Get().CreateWebSocket("ws://localhost:8080");
+	WebSocket = FWebSocketsModule::Get().CreateWebSocket("ws://localhost:4040");
 
 	GEngine->AddOnScreenDebugMessage(-1, -15.0f, FColor::Green, "Successfully connected");
 	UE_LOG(LogTemp, Warning, TEXT("Hello World!"));
