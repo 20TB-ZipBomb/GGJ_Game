@@ -80,7 +80,7 @@ void UGGJ_GameInstance::OnStartGame()
 
 void UGGJ_GameInstance::Shutdown()
 {
-	if (WebSocket->IsConnected())
+	if (WebSocket.IsValid() && WebSocket->IsConnected())
 	{
 		WebSocket->Close();
 	}
