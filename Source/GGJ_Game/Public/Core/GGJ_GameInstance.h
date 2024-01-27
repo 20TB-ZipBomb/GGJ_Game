@@ -19,5 +19,9 @@ class GGJ_GAME_API UGGJ_GameInstance : public UGameInstance
 		virtual void Init() override;
 		virtual void Shutdown() override;
 
+		// Add this custom event
+		UFUNCTION(BlueprintCallable, Category = "WebSocket")
+		void OnConnectButtonPressed();
+
 		TSharedPtr<IWebSocket> WebSocket;
 };
