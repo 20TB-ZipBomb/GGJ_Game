@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "Engine/GameInstance.h"
 #include "IWebSocket.h"
+#include "Components/TextBlock.h"
 #include "GGJ_GameInstance.generated.h"
 
 /**
@@ -17,7 +18,15 @@ class GGJ_GAME_API UGGJ_GameInstance : public UGameInstance
 
 	public:
 		virtual void Init() override;
+
+		UFUNCTION(BlueprintCallable, Category = "WebSocket")
 		virtual void Shutdown() override;
+
+		UFUNCTION(BlueprintCallable, Category = "WebSocket")
+		void OnStartGame();
+
+		UPROPERTY(BlueprintReadWrite, Category = "WebSocket")
+		int PlayerCount;
 
 		TSharedPtr<IWebSocket> WebSocket;
 };
