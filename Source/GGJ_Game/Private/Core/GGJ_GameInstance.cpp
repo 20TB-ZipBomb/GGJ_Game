@@ -14,7 +14,7 @@ void UGGJ_GameInstance::Init()
 	}
 }
 
-void UGGJ_GameInstance::OnConnectButtonPressed()
+void UGGJ_GameInstance::OnStartGame()
 {
 
 	WebSocket = FWebSocketsModule::Get().CreateWebSocket("ws://localhost:8080");
@@ -24,38 +24,39 @@ void UGGJ_GameInstance::OnConnectButtonPressed()
 
 
 	//Runs whenever the websocket is connected to. Attach to the 'OnConnected' event
-	WebSocket->OnConnected().AddLambda([]()
+	WebSocket->OnConnected().AddLambda([this]()
 		{
 			GEngine->AddOnScreenDebugMessage(-1, -15.0f, FColor::Green, "Successfully connected");
 			UE_LOG(LogTemp, Warning, TEXT("Successfully connected"));
 
+			PlayerCount++;
 		});
 
 	//Event that triggers if an error occurs whilst connected
 	WebSocket->OnConnectionError().AddLambda([](const FString& Error)
 		{
-			GEngine->AddOnScreenDebugMessage(-1, -15.0f, FColor::Red, Error);
+			GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Red, Error);
 			UE_LOG(LogTemp, Warning, TEXT("%s"), *Error);
 		});
 
 	//Event that triggers upon closing the connection.
 	WebSocket->OnClosed().AddLambda([](int32 StatusCode, const FString& Reason, bool bWasClean)
 		{
-			GEngine->AddOnScreenDebugMessage(-1, -15.0f, bWasClean ? FColor::Green : FColor::Red, "Connection closed" + Reason);
+			GEngine->AddOnScreenDebugMessage(-1, 15.0f, bWasClean ? FColor::Green : FColor::Red, "Connection closed" + Reason);
 			UE_LOG(LogTemp, Warning, TEXT("Connection closed: %s"), *Reason);
 		});
 
 	//Event that triggers upon recieving a string message
-	WebSocket->OnMessage().AddLambda([](const FString& Message)
+	WebSocket->OnMessage().AddLambda([this](const FString& Message)
 		{
-			GEngine->AddOnScreenDebugMessage(-1, -15.0f, FColor::Cyan, "Recieved Message" + Message);
+			GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Cyan, "Recieved Message" + Message);
 			UE_LOG(LogTemp, Warning, TEXT("Recieved Message %s"), *Message);
 		});
 
 	//Event that triggers when client sends message to server
 	WebSocket->OnMessageSent().AddLambda([](const FString& Message)
 		{
-			GEngine->AddOnScreenDebugMessage(-1, -15.0f, FColor::Cyan, "Recieved Message" + Message);
+			GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Cyan, "Sent Message" + Message);
 			UE_LOG(LogTemp, Warning, TEXT("Sent message %s"), *Message);
 		});
 
@@ -68,6 +69,8 @@ void UGGJ_GameInstance::Shutdown()
 	{
 		WebSocket->Close();
 	}
+
+	PlayerCount--;
 
 	Super::Shutdown();
 
