@@ -63,8 +63,6 @@ void UGGJ_GameInstance::OnStartGame()
 			FJsonSerializer::Serialize(JsonObject.ToSharedRef(), JsonWriter);
 
 			WebSocket->Send( *JsonString );
-
-			PlayerCount++;
 		} );
 
 	//Event that triggers if an error occurs whilst connected
@@ -85,6 +83,7 @@ void UGGJ_GameInstance::OnStartGame()
 	WebSocket->OnMessage().AddLambda([this](const FString& Message)
 		{
 			GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Cyan, "Recieved Message" + Message);
+			UE_LOG(LogTemp, Warning, TEXT("Recieved Message %s"), *Message);
 
 			TSharedRef<TJsonReader<TCHAR>> JsonReader = TJsonReaderFactory<TCHAR>::Create( Message );
 			TSharedPtr<FJsonObject> JsonMessage;
@@ -110,11 +109,20 @@ void UGGJ_GameInstance::OnStartGame()
 			{
 				FPlayerJoinedMessage playerJoinedMessage;
 				FJsonObjectConverter::JsonObjectStringToUStruct( Message, &playerJoinedMessage, 0, 0, false );
+				
+				PlayerCount++;
+
+				UE_LOG(LogTemp, Error, TEXT("Player Joined"));
+				PlayerCountUpdated.Broadcast(PlayerCount);
 			}
 			else if ( messageType.Equals( LobbyCode ) )
 			{
 				FLobbyCodeMessage lobbyCodeMessage;
 				FJsonObjectConverter::JsonObjectStringToUStruct( Message, &lobbyCodeMessage, 0, 0, false );
+
+				CurrentLobbyCode = lobbyCodeMessage.lobby_code;
+
+				LobbyCodeRecieved.Broadcast(CurrentLobbyCode);
 			}
 			else if ( messageType.Equals( StartGame ) )
 			{
@@ -123,7 +131,7 @@ void UGGJ_GameInstance::OnStartGame()
 			}
 			else if ( messageType.Equals( ReceivedCards ) )
 			{
-				// todo idk change the scene or smth
+				PlayersSubmittedJobs.Broadcast();
 			}
 			else if ( messageType.Equals( PlayerJobSubmittingFinished ) )
 			{
