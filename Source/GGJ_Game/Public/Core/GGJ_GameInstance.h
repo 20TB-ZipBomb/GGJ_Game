@@ -70,6 +70,11 @@ struct FGameStartMessage
 /**
  * 
  */
+
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnPlayerCountUpdate, int32, PlayerCount);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnLobbyCodeRecieved, int32, LobbyCode);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnPlayersSubmittedJobs);
+
 UCLASS()
 class GGJ_GAME_API UGGJ_GameInstance : public UGameInstance
 {
@@ -87,10 +92,22 @@ class GGJ_GAME_API UGGJ_GameInstance : public UGameInstance
 		UFUNCTION(BlueprintCallable, Category = "WebSocket")
 		void RequestStartGame();
 
+		UPROPERTY(BlueprintAssignable)
+		FOnPlayerCountUpdate PlayerCountUpdated;
+
+		UPROPERTY(BlueprintAssignable)
+		FOnLobbyCodeRecieved LobbyCodeRecieved;
+
+		UPROPERTY(BlueprintAssignable)
+		FOnPlayersSubmittedJobs PlayersSubmittedJobs;
+
 		UPROPERTY(BlueprintReadWrite, Category = "WebSocket")
-		int PlayerCount;
+		int32 PlayerCount;
+
+		UPROPERTY(BlueprintReadWrite, Category = "WebSocket")
+		int32 CurrentLobbyCode;
+
 
 	private:
 		TSharedPtr<IWebSocket> WebSocket;
-	
 };
