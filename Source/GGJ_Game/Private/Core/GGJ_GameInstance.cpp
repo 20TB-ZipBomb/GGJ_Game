@@ -116,7 +116,6 @@ void UGGJ_GameInstance::OnStartGame()
 				CurrentPlayers.Add(playerJoinedMessage.player.player_id, playerJoinedMessage.player.name);
 
 				PlayerCount++;
-				PlayerMap.Add(playerJoinedMessage.player.player_id, playerJoinedMessage.player.name);
 
 				UE_LOG(LogTemp, Error, TEXT("Player Joined"));
 				PlayerCountUpdated.Broadcast(PlayerCount);
