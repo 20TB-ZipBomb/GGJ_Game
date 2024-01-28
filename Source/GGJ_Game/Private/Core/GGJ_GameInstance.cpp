@@ -128,7 +128,7 @@ void UGGJ_GameInstance::OnStartGame()
 
 				CurrentLobbyCode = lobbyCodeMessage.lobby_code;
 
-				LobbyCodeRecieved.Broadcast(CurrentLobbyCode);
+				LobbyCodeRecieved.Broadcast( CurrentLobbyCode );
 			}
 			else if ( messageType.Equals( StartGame ) )
 			{
