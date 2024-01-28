@@ -20,6 +20,7 @@ namespace
 	const FString LobbyCode{ "lobby_code" };
 	const FString PlayerJoined{ "player_joined" };
 	const FString ReceivedCards{ "received_cards" };
+	const FString TimerFinished{ "timer_finished" };
 	const FString PlayerScoreSubmittingFinished{ "score_submission" };
 	const FString PlayerJobSubmittingFinished{ "player_job_submitting_finished" };
 	const FString PlayerExpSubmittingFinished{ "player_exp_submitting_finished" };
@@ -165,6 +166,12 @@ void UGGJ_GameInstance::OnStartGame()
 				FPlayerImprovMessage playerImprovMessage;
 				FJsonObjectConverter::JsonObjectStringToUStruct(Message, &playerImprovMessage, 0, 0, false);
 				ImprovStart.Broadcast(playerImprovMessage);
+			}
+			else if (messageType.Equals( TimerFinished ))
+			{
+				FTimerFinished TimeFinish;
+				FJsonObjectConverter::JsonObjectStringToUStruct(Message, &TimeFinish, 0, 0, false);
+				TimerEnd.Broadcast();
 			}
 			else
 			{
