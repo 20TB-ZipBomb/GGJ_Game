@@ -63,8 +63,6 @@ void UGGJ_GameInstance::OnStartGame()
 			FJsonSerializer::Serialize(JsonObject.ToSharedRef(), JsonWriter);
 
 			WebSocket->Send( *JsonString );
-
-			PlayerCount++;
 		} );
 
 	//Event that triggers if an error occurs whilst connected
@@ -113,13 +111,18 @@ void UGGJ_GameInstance::OnStartGame()
 				FJsonObjectConverter::JsonObjectStringToUStruct( Message, &playerJoinedMessage, 0, 0, false );
 				
 				PlayerCount++;
-				PlayerCountUpdated.Broadcast(PlayerCount);
 
+				UE_LOG(LogTemp, Error, TEXT("Player Joined"));
+				PlayerCountUpdated.Broadcast(PlayerCount);
 			}
 			else if ( messageType.Equals( LobbyCode ) )
 			{
 				FLobbyCodeMessage lobbyCodeMessage;
 				FJsonObjectConverter::JsonObjectStringToUStruct( Message, &lobbyCodeMessage, 0, 0, false );
+
+				CurrentLobbyCode = lobbyCodeMessage.lobby_code;
+
+				LobbyCodeRecieved.Broadcast(CurrentLobbyCode);
 			}
 			else if ( messageType.Equals( StartGame ) )
 			{
