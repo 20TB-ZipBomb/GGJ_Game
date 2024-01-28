@@ -44,6 +44,18 @@ struct FPlayerJoinedMessage
 };
 
 USTRUCT()
+struct FScoreSubmission
+{
+	GENERATED_BODY()
+
+	UPROPERTY()
+	FString message_type;
+
+	UPROPERTY()
+	int32 score_in_cents;
+};
+
+USTRUCT()
 struct FPlayerJobSubmittingFinishedMessage
 {
 	GENERATED_BODY()
@@ -67,37 +79,37 @@ struct FGameStartMessage
 	uint32 number_of_jobs;
 };
 
-USTRUCT(BlueprintType)
+USTRUCT(BlueprintType, Blueprintable)
 struct FCardMessage
 {
 	GENERATED_BODY()
 
-	UPROPERTY()
+	UPROPERTY(BlueprintReadWrite)
 	FString card_id;
 
-	UPROPERTY()
+	UPROPERTY(BlueprintReadWrite)
 	FString job_text;
 };
 
-USTRUCT(BlueprintType)
+USTRUCT(BlueprintType, Blueprintable)
 struct FPlayerImprovMessage
 {
 	GENERATED_BODY()
 
-	UPROPERTY()
+	UPROPERTY(BlueprintReadWrite)
 	FString message_type;
 
-	UPROPERTY()
+	UPROPERTY(BlueprintReadWrite)
 	FString player_id;
 
-	UPROPERTY()
+	UPROPERTY(BlueprintReadWrite)
 	FCardMessage picked_card;
 
-	UPROPERTY()
+	UPROPERTY(BlueprintReadWrite)
 	FCardMessage job_card;
 
-	UPROPERTY()
-	uint32 time_in_seconds;
+	UPROPERTY(BlueprintReadWrite)
+	int32 time_in_seconds;
 };
 
 /**
@@ -107,6 +119,7 @@ struct FPlayerImprovMessage
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnPlayerCountUpdate, int32, PlayerCount);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnLobbyCodeRecieved, int32, LobbyCode);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnImprovStart, FPlayerImprovMessage, ImprovMessage);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnFinalScoreSubmitted, int32, TotalScore);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnPlayersSubmittedJobs);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnPlayersSubmittedExperience);
 
@@ -138,6 +151,9 @@ class GGJ_GAME_API UGGJ_GameInstance : public UGameInstance
 
 		UPROPERTY(BlueprintAssignable, Category = "WebSocket")
 		FOnPlayersSubmittedExperience PlayersSubmittedExperience;
+
+		UPROPERTY(BlueprintAssignable, Category = "WebSocket")
+		FOnFinalScoreSubmitted FinalScoreSubmitted;
 
 		UPROPERTY(BlueprintAssignable, Category = "WebSocket")
 		FOnImprovStart ImprovStart;

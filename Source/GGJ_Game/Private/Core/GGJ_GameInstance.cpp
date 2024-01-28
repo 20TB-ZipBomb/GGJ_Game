@@ -20,6 +20,7 @@ namespace
 	const FString LobbyCode{ "lobby_code" };
 	const FString PlayerJoined{ "player_joined" };
 	const FString ReceivedCards{ "received_cards" };
+	const FString PlayerScoreSubmittingFinished{ "score_submission" };
 	const FString PlayerJobSubmittingFinished{ "player_job_submitting_finished" };
 	const FString PlayerExpSubmittingFinished{ "player_exp_submitting_finished" };
 	const FString PlayerImprovStart{ "player_improv_start" };
@@ -145,6 +146,16 @@ void UGGJ_GameInstance::OnStartGame()
 			}
 			else if ( messageType.Equals( PlayerExpSubmittingFinished ) )
 			{
+
+
+			}
+			else if ( messageType.Equals( PlayerScoreSubmittingFinished ) )
+			{
+
+				FScoreSubmission playerScoreSubmitted;
+				FJsonObjectConverter::JsonObjectStringToUStruct(Message, &playerScoreSubmitted, 0, 0, false);
+
+				FinalScoreSubmitted.Broadcast(playerScoreSubmitted.score_in_cents);
 
 			}
 			else if (messageType.Equals( PlayerImprovStart ))
