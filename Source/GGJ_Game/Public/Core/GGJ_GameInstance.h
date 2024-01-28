@@ -7,6 +7,42 @@
 #include "IWebSocket.h"
 #include "Components/TextBlock.h"
 #include "GGJ_GameInstance.generated.h"
+USTRUCT()
+struct FLobbyCodeMessage
+{
+	GENERATED_BODY()
+
+	UPROPERTY()
+	FString message_type;
+	
+	UPROPERTY()
+	uint32 lobby_code;
+};
+
+USTRUCT()
+struct FPlayerMessage
+{
+	GENERATED_BODY()
+	
+	UPROPERTY()
+	FString player_id;
+
+	UPROPERTY()
+	FString name;
+};
+
+USTRUCT()
+struct FPlayerJoinedMessage
+{
+	GENERATED_BODY()
+
+	UPROPERTY()
+	FString message_type;
+
+	UPROPERTY()
+	FPlayerMessage player;
+};
+
 
 /**
  * 
@@ -28,5 +64,7 @@ class GGJ_GAME_API UGGJ_GameInstance : public UGameInstance
 		UPROPERTY(BlueprintReadWrite, Category = "WebSocket")
 		int PlayerCount;
 
+	private:
 		TSharedPtr<IWebSocket> WebSocket;
+	
 };
