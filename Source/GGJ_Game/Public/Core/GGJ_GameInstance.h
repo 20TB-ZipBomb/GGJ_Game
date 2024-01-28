@@ -11,6 +11,9 @@
 /**
  * 
  */
+
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnPlayerCountUpdate, int32, PlayerCount);
+
 UCLASS()
 class GGJ_GAME_API UGGJ_GameInstance : public UGameInstance
 {
@@ -25,8 +28,12 @@ class GGJ_GAME_API UGGJ_GameInstance : public UGameInstance
 		UFUNCTION(BlueprintCallable, Category = "WebSocket")
 		void OnStartGame();
 
+		UPROPERTY(BlueprintAssignable)
+		FOnPlayerCountUpdate PlayerCountUpdated;
+
 		UPROPERTY(BlueprintReadWrite, Category = "WebSocket")
 		int PlayerCount;
 
 		TSharedPtr<IWebSocket> WebSocket;
+
 };
