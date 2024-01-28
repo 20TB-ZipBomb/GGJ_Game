@@ -9,12 +9,20 @@
 namespace
 {
 	const FString WebSocketURL{ "ws://127.0.0.1:4040/connect" };
-	
+	const FString MessageTypeString{ "message_type" };
+
+	// Send
 	const FString CreateLobby{ "create_lobby" };
+	const FString StartGame{ "game_start" };
+
+	// Receive
 	const FString ConnectionRefused{ "connection_refused" };
 	const FString LobbyCode{ "lobby_code" };
 	const FString PlayerJoined{ "player_joined" };
-	const FString MessageTypeString{ "message_type" };
+	const FString ReceivedCards{ "received_cards" };
+	const FString PlayerJobSubmittingFinished{ "player_job_submitting_finished" };
+	
+	
 
 } // namespace
 
@@ -108,6 +116,20 @@ void UGGJ_GameInstance::OnStartGame()
 				FLobbyCodeMessage lobbyCodeMessage;
 				FJsonObjectConverter::JsonObjectStringToUStruct( Message, &lobbyCodeMessage, 0, 0, false );
 			}
+			else if ( messageType.Equals( StartGame ) )
+			{
+				FGameStartMessage gameStartMessage;
+				FJsonObjectConverter::JsonObjectStringToUStruct( Message, &gameStartMessage, 0, 0, false );
+			}
+			else if ( messageType.Equals( ReceivedCards ) )
+			{
+				// todo idk change the scene or smth
+			}
+			else if ( messageType.Equals( PlayerJobSubmittingFinished ) )
+			{
+				FPlayerJobSubmittingFinishedMessage playerJobSubmittingFinishedMessage;
+				FJsonObjectConverter::JsonObjectStringToUStruct( Message, &playerJobSubmittingFinishedMessage, 0, 0, false );
+			}			
 			else
 			{
 				UE_LOG(LogTemp, Error, TEXT( "Client doesn't know what %s is lol" ), *messageType );
@@ -122,6 +144,21 @@ void UGGJ_GameInstance::OnStartGame()
 		});
 
 	WebSocket->Connect();
+}
+
+void UGGJ_GameInstance::RequestStartGame()
+{
+	TSharedPtr<FJsonObject> JsonObject = MakeShareable(new FJsonObject);
+	JsonObject->SetStringField(MessageTypeString, StartGame);
+
+	// Convert the JSON object to a string
+	FString JsonString;
+	TSharedRef<TJsonWriter<TCHAR>> JsonWriter = TJsonWriterFactory<TCHAR>::Create(&JsonString);
+	FJsonSerializer::Serialize(JsonObject.ToSharedRef(), JsonWriter);
+
+	WebSocket->Send( *JsonString );
+
+	// TODO Change scene or whatever
 }
 
 void UGGJ_GameInstance::Shutdown()

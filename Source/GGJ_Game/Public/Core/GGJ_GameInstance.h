@@ -20,7 +20,7 @@ struct FLobbyCodeMessage
 };
 
 USTRUCT()
-struct FPlayerMessage
+struct FPlayerStruct
 {
 	GENERATED_BODY()
 	
@@ -40,9 +40,32 @@ struct FPlayerJoinedMessage
 	FString message_type;
 
 	UPROPERTY()
-	FPlayerMessage player;
+	FPlayerStruct player;
 };
 
+USTRUCT()
+struct FPlayerJobSubmittingFinishedMessage
+{
+	GENERATED_BODY()
+
+	UPROPERTY()
+	FString message_type;
+
+	UPROPERTY()
+	uint32 player_id;
+};
+
+USTRUCT()
+struct FGameStartMessage
+{
+	GENERATED_BODY()
+
+	UPROPERTY()
+	FString message_type;
+
+	UPROPERTY()
+	uint32 number_of_jobs;
+};
 
 /**
  * 
@@ -60,6 +83,9 @@ class GGJ_GAME_API UGGJ_GameInstance : public UGameInstance
 
 		UFUNCTION(BlueprintCallable, Category = "WebSocket")
 		void OnStartGame();
+	
+		UFUNCTION(BlueprintCallable, Category = "WebSocket")
+		void RequestStartGame();
 
 		UPROPERTY(BlueprintReadWrite, Category = "WebSocket")
 		int PlayerCount;
