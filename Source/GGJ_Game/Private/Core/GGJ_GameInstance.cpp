@@ -135,6 +135,16 @@ void UGGJ_GameInstance::OnStartGame()
 			{
 				FGameStartMessage gameStartMessage;
 				FJsonObjectConverter::JsonObjectStringToUStruct( Message, &gameStartMessage, 0, 0, false );
+			
+			}
+			else if (messageType.Equals(PlayerScoreSubmittingFinished))
+			{
+
+				FScoreSubmission playerScoreSubmitted;
+				FJsonObjectConverter::JsonObjectStringToUStruct(Message, &playerScoreSubmitted, 0, 0, false);
+
+				FinalScoreSubmitted.Broadcast(playerScoreSubmitted.score_in_cents);
+
 			}
 			else if ( messageType.Equals( ReceivedCards ) )
 			{
@@ -150,15 +160,6 @@ void UGGJ_GameInstance::OnStartGame()
 			else if ( messageType.Equals( PlayerExpSubmittingFinished ) )
 			{
 
-
-			}
-			else if ( messageType.Equals( PlayerScoreSubmittingFinished ) )
-			{
-
-				FScoreSubmission playerScoreSubmitted;
-				FJsonObjectConverter::JsonObjectStringToUStruct(Message, &playerScoreSubmitted, 0, 0, false);
-
-				FinalScoreSubmitted.Broadcast(playerScoreSubmitted.score_in_cents);
 
 			}
 			else if (messageType.Equals( PlayerImprovStart ))
