@@ -64,7 +64,7 @@ struct FPlayerJobSubmittingFinishedMessage
 	FString message_type;
 
 	UPROPERTY()
-	uint32 player_id;
+	FString player_id;
 };
 
 USTRUCT()
@@ -120,6 +120,7 @@ DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnPlayerCountUpdate, int32, PlayerC
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnLobbyCodeRecieved, int32, LobbyCode);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnImprovStart, FPlayerImprovMessage, ImprovMessage);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnFinalScoreSubmitted, int32, TotalScore);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnPlayerSubmittedJob, FString, PlayerId);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnPlayersSubmittedJobs);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnPlayersSubmittedExperience);
 
@@ -148,6 +149,9 @@ class GGJ_GAME_API UGGJ_GameInstance : public UGameInstance
 
 		UPROPERTY(BlueprintAssignable, Category = "WebSocket")
 		FOnPlayersSubmittedJobs PlayersSubmittedJobs;
+
+		UPROPERTY(BlueprintAssignable, Category = "WebSocket")
+		FOnPlayerSubmittedJob PlayerSubmittedJob;
 
 		UPROPERTY(BlueprintAssignable, Category = "WebSocket")
 		FOnPlayersSubmittedExperience PlayersSubmittedExperience;

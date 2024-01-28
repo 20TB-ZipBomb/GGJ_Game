@@ -142,6 +142,7 @@ void UGGJ_GameInstance::OnStartGame()
 			{
 				FPlayerJobSubmittingFinishedMessage playerJobSubmittingFinishedMessage;
 				FJsonObjectConverter::JsonObjectStringToUStruct( Message, &playerJobSubmittingFinishedMessage, 0, 0, false );
+				PlayerSubmittedJob.Broadcast(playerJobSubmittingFinishedMessage.player_id);
 
 			}
 			else if ( messageType.Equals( PlayerExpSubmittingFinished ) )
