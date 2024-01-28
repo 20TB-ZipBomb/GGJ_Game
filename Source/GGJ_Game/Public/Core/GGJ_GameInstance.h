@@ -44,6 +44,18 @@ struct FPlayerJoinedMessage
 };
 
 USTRUCT()
+struct FScoreSubmission
+{
+	GENERATED_BODY()
+
+	UPROPERTY()
+	FString message_type;
+
+	UPROPERTY()
+	int32 score_in_cents;
+};
+
+USTRUCT()
 struct FPlayerJobSubmittingFinishedMessage
 {
 	GENERATED_BODY()
@@ -67,13 +79,49 @@ struct FGameStartMessage
 	uint32 number_of_jobs;
 };
 
+USTRUCT(BlueprintType, Blueprintable)
+struct FCardMessage
+{
+	GENERATED_BODY()
+
+	UPROPERTY(BlueprintReadWrite)
+	FString card_id;
+
+	UPROPERTY(BlueprintReadWrite)
+	FString job_text;
+};
+
+USTRUCT(BlueprintType, Blueprintable)
+struct FPlayerImprovMessage
+{
+	GENERATED_BODY()
+
+	UPROPERTY(BlueprintReadWrite)
+	FString message_type;
+
+	UPROPERTY(BlueprintReadWrite)
+	FString player_id;
+
+	UPROPERTY(BlueprintReadWrite)
+	FCardMessage picked_card;
+
+	UPROPERTY(BlueprintReadWrite)
+	FCardMessage job_card;
+
+	UPROPERTY(BlueprintReadWrite)
+	int32 time_in_seconds;
+};
+
 /**
  * 
  */
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnPlayerCountUpdate, int32, PlayerCount);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnLobbyCodeRecieved, int32, LobbyCode);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnImprovStart, FPlayerImprovMessage, ImprovMessage);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnFinalScoreSubmitted, int32, TotalScore);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnPlayersSubmittedJobs);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnPlayersSubmittedExperience);
 
 UCLASS()
 class GGJ_GAME_API UGGJ_GameInstance : public UGameInstance
@@ -92,14 +140,23 @@ class GGJ_GAME_API UGGJ_GameInstance : public UGameInstance
 		UFUNCTION(BlueprintCallable, Category = "WebSocket")
 		void RequestStartGame();
 
-		UPROPERTY(BlueprintAssignable)
+		UPROPERTY(BlueprintAssignable, Category = "WebSocket")
 		FOnPlayerCountUpdate PlayerCountUpdated;
 
-		UPROPERTY(BlueprintAssignable)
+		UPROPERTY(BlueprintAssignable, Category = "WebSocket")
 		FOnLobbyCodeRecieved LobbyCodeRecieved;
 
-		UPROPERTY(BlueprintAssignable)
+		UPROPERTY(BlueprintAssignable, Category = "WebSocket")
 		FOnPlayersSubmittedJobs PlayersSubmittedJobs;
+
+		UPROPERTY(BlueprintAssignable, Category = "WebSocket")
+		FOnPlayersSubmittedExperience PlayersSubmittedExperience;
+
+		UPROPERTY(BlueprintAssignable, Category = "WebSocket")
+		FOnFinalScoreSubmitted FinalScoreSubmitted;
+
+		UPROPERTY(BlueprintAssignable, Category = "WebSocket")
+		FOnImprovStart ImprovStart;
 
 		UPROPERTY(BlueprintReadWrite, Category = "WebSocket")
 		int32 PlayerCount;
@@ -108,8 +165,7 @@ class GGJ_GAME_API UGGJ_GameInstance : public UGameInstance
 		int32 CurrentLobbyCode;
 
 		UPROPERTY(BlueprintReadWrite, Category = "WebSocket")
-		TMap<FString, FString> PlayerMap;
-
+		TMap<FString, FString> CurrentPlayers;
 
 	private:
 		TSharedPtr<IWebSocket> WebSocket;
