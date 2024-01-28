@@ -107,6 +107,9 @@ class GGJ_GAME_API UGGJ_GameInstance : public UGameInstance
 		UPROPERTY(BlueprintReadWrite, Category = "WebSocket")
 		int32 CurrentLobbyCode;
 
+		UPROPERTY(BlueprintReadWrite, Category = "WebSocket")
+		TMap<FString, FString> PlayerMap;
+
 
 	private:
 		TSharedPtr<IWebSocket> WebSocket;

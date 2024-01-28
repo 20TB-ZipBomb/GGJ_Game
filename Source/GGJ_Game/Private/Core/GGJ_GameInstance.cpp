@@ -111,6 +111,7 @@ void UGGJ_GameInstance::OnStartGame()
 				FJsonObjectConverter::JsonObjectStringToUStruct( Message, &playerJoinedMessage, 0, 0, false );
 				
 				PlayerCount++;
+				PlayerMap.Add(playerJoinedMessage.player.player_id, playerJoinedMessage.player.name);
 
 				UE_LOG(LogTemp, Error, TEXT("Player Joined"));
 				PlayerCountUpdated.Broadcast(PlayerCount);
