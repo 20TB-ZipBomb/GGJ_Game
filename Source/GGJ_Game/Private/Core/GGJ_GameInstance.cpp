@@ -119,6 +119,7 @@ void UGGJ_GameInstance::OnStartGame()
 
 				UE_LOG(LogTemp, Error, TEXT("Player Joined"));
 				PlayerCountUpdated.Broadcast(PlayerCount);
+				PlayerJustJoined.Broadcast(playerJoinedMessage.player.player_id, playerJoinedMessage.player.name);
 			}
 			else if ( messageType.Equals( LobbyCode ) )
 			{

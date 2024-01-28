@@ -115,7 +115,7 @@ struct FPlayerImprovMessage
 /**
  * 
  */
-
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnPlayerJoin, FString, PlayerId, FString, PlayerName);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnPlayerCountUpdate, int32, PlayerCount);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnLobbyCodeRecieved, int32, LobbyCode);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnImprovStart, FPlayerImprovMessage, ImprovMessage);
@@ -143,6 +143,10 @@ class GGJ_GAME_API UGGJ_GameInstance : public UGameInstance
 
 		UPROPERTY(BlueprintAssignable, Category = "WebSocket")
 		FOnPlayerCountUpdate PlayerCountUpdated;
+
+		//weird name to prevent name conflict
+		UPROPERTY(BlueprintAssignable, Category = "WebSocket")
+		FOnPlayerJoin PlayerJustJoined;
 
 		UPROPERTY(BlueprintAssignable, Category = "WebSocket")
 		FOnLobbyCodeRecieved LobbyCodeRecieved;
