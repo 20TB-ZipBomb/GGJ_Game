@@ -7,6 +7,9 @@
 #include "IWebSocket.h"
 #include "Components/TextBlock.h"
 #include "GGJ_GameInstance.generated.h"
+
+#pragma region Structs
+
 USTRUCT()
 struct FLobbyCodeMessage
 {
@@ -103,14 +106,16 @@ struct FPlayerImprovMessage
 	FString player_id;
 
 	UPROPERTY(BlueprintReadWrite)
-	FCardMessage picked_card;
+	FCardMessage SelectedCard;
 
 	UPROPERTY(BlueprintReadWrite)
-	FCardMessage job_card;
+	FCardMessage JobCard;
 
 	UPROPERTY(BlueprintReadWrite)
 	int32 time_in_seconds;
 };
+
+#pragma endregion
 
 /**
  * 
@@ -174,6 +179,9 @@ class GGJ_GAME_API UGGJ_GameInstance : public UGameInstance
 
 		UPROPERTY(BlueprintReadWrite, Category = "WebSocket")
 		TMap<FString, FString> CurrentPlayers;
+
+		UPROPERTY(BlueprintReadWrite, Category = "WebSocket")
+		bool ImprovStarted = false;
 
 	private:
 		TSharedPtr<IWebSocket> WebSocket;
