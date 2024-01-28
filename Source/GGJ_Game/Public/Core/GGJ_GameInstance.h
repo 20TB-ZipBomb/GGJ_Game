@@ -67,13 +67,48 @@ struct FGameStartMessage
 	uint32 number_of_jobs;
 };
 
+USTRUCT(BlueprintType)
+struct FCardMessage
+{
+	GENERATED_BODY()
+
+	UPROPERTY()
+	FString card_id;
+
+	UPROPERTY()
+	FString job_text;
+};
+
+USTRUCT(BlueprintType)
+struct FPlayerImprovMessage
+{
+	GENERATED_BODY()
+
+	UPROPERTY()
+	FString message_type;
+
+	UPROPERTY()
+	FString player_id;
+
+	UPROPERTY()
+	FCardMessage picked_card;
+
+	UPROPERTY()
+	FCardMessage job_card;
+
+	UPROPERTY()
+	uint32 time_in_seconds;
+};
+
 /**
  * 
  */
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnPlayerCountUpdate, int32, PlayerCount);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnLobbyCodeRecieved, int32, LobbyCode);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnImprovStart, FPlayerImprovMessage, ImprovMessage);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnPlayersSubmittedJobs);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnPlayersSubmittedExperience);
 
 UCLASS()
 class GGJ_GAME_API UGGJ_GameInstance : public UGameInstance
@@ -92,14 +127,20 @@ class GGJ_GAME_API UGGJ_GameInstance : public UGameInstance
 		UFUNCTION(BlueprintCallable, Category = "WebSocket")
 		void RequestStartGame();
 
-		UPROPERTY(BlueprintAssignable)
+		UPROPERTY(BlueprintAssignable, Category = "WebSocket")
 		FOnPlayerCountUpdate PlayerCountUpdated;
 
-		UPROPERTY(BlueprintAssignable)
+		UPROPERTY(BlueprintAssignable, Category = "WebSocket")
 		FOnLobbyCodeRecieved LobbyCodeRecieved;
 
-		UPROPERTY(BlueprintAssignable)
+		UPROPERTY(BlueprintAssignable, Category = "WebSocket")
 		FOnPlayersSubmittedJobs PlayersSubmittedJobs;
+
+		UPROPERTY(BlueprintAssignable, Category = "WebSocket")
+		FOnPlayersSubmittedExperience PlayersSubmittedExperience;
+
+		UPROPERTY(BlueprintAssignable, Category = "WebSocket")
+		FOnImprovStart ImprovStart;
 
 		UPROPERTY(BlueprintReadWrite, Category = "WebSocket")
 		int32 PlayerCount;
@@ -107,6 +148,8 @@ class GGJ_GAME_API UGGJ_GameInstance : public UGameInstance
 		UPROPERTY(BlueprintReadWrite, Category = "WebSocket")
 		int32 CurrentLobbyCode;
 
+		UPROPERTY(BlueprintReadWrite, Category = "WebSocket")
+		TMap<FString, FString> CurrentPlayers;
 
 	private:
 		TSharedPtr<IWebSocket> WebSocket;

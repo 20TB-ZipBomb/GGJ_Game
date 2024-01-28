@@ -21,6 +21,8 @@ namespace
 	const FString PlayerJoined{ "player_joined" };
 	const FString ReceivedCards{ "received_cards" };
 	const FString PlayerJobSubmittingFinished{ "player_job_submitting_finished" };
+	const FString PlayerExpSubmittingFinished{ "player_exp_submitting_finished" };
+	const FString PlayerImprovStart{ "player_improv_start" };
 	
 	
 
@@ -110,6 +112,8 @@ void UGGJ_GameInstance::OnStartGame()
 				FPlayerJoinedMessage playerJoinedMessage;
 				FJsonObjectConverter::JsonObjectStringToUStruct( Message, &playerJoinedMessage, 0, 0, false );
 				
+				CurrentPlayers.Add(playerJoinedMessage.player.player_id, playerJoinedMessage.player.name);
+
 				PlayerCount++;
 
 				UE_LOG(LogTemp, Error, TEXT("Player Joined"));
@@ -137,7 +141,18 @@ void UGGJ_GameInstance::OnStartGame()
 			{
 				FPlayerJobSubmittingFinishedMessage playerJobSubmittingFinishedMessage;
 				FJsonObjectConverter::JsonObjectStringToUStruct( Message, &playerJobSubmittingFinishedMessage, 0, 0, false );
-			}			
+
+			}
+			else if ( messageType.Equals( PlayerExpSubmittingFinished ) )
+			{
+
+			}
+			else if (messageType.Equals( PlayerImprovStart ))
+			{
+				FPlayerImprovMessage playerImprovMessage;
+				FJsonObjectConverter::JsonObjectStringToUStruct(Message, &playerImprovMessage, 0, 0, false);
+				ImprovStart.Broadcast(playerImprovMessage);
+			}
 			else
 			{
 				UE_LOG(LogTemp, Error, TEXT( "Client doesn't know what %s is lol" ), *messageType );
