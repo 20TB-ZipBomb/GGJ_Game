@@ -19,7 +19,7 @@ void UGGJ_GameInstance::Init()
 void UGGJ_GameInstance::OnStartGame()
 {
 
-	WebSocket = FWebSocketsModule::Get().CreateWebSocket("ws://127.0.0.1:4041/connect");
+	WebSocket = FWebSocketsModule::Get().CreateWebSocket("ws://127.0.0.1:4040/connect");
 
 	GEngine->AddOnScreenDebugMessage(-1, -15.0f, FColor::Green, "Successfully connected");
 	UE_LOG(LogTemp, Warning, TEXT("Hello World!"));
@@ -66,6 +66,10 @@ void UGGJ_GameInstance::OnStartGame()
 		{
 			GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Cyan, "Recieved Message" + Message);
 			UE_LOG(LogTemp, Warning, TEXT("Recieved Message %s"), *Message);
+
+			PlayerCountUpdated.Broadcast(PlayerCount);
+
+			PlayerCount++;
 		});
 
 	//Event that triggers when client sends message to server
