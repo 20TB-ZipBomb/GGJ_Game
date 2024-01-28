@@ -131,7 +131,7 @@ void UGGJ_GameInstance::OnStartGame()
 			}
 			else if ( messageType.Equals( ReceivedCards ) )
 			{
-				// todo idk change the scene or smth
+				PlayersSubmittedJobs.Broadcast();
 			}
 			else if ( messageType.Equals( PlayerJobSubmittingFinished ) )
 			{
