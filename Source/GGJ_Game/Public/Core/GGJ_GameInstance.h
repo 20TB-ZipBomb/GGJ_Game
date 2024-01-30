@@ -134,8 +134,8 @@ DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnPlayerCountUpdate, int32, PlayerC
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnLobbyCodeRecieved, int32, LobbyCode);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnImprovStart, FPlayerImprovMessage, ImprovMessage);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnFinalScoreSubmitted, int32, TotalScore);
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnPlayerSubmittedJob, FString, PlayerId);
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnTimerEnd);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnCardReceived, FString, JobTitle);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnTimerEnd);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnPlayersSubmittedJobs);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnPlayersSubmittedExperience);
 
@@ -183,6 +183,9 @@ class GGJ_GAME_API UGGJ_GameInstance : public UGameInstance
 
 		UPROPERTY(BlueprintAssignable, Category = "WebSocket")
 		FOnImprovStart ImprovStart;
+
+		UPROPERTY(BlueprintAssignable, Category = "WebSocket")
+		FOnCardReceived CardReceived;
 
 		UPROPERTY(BlueprintReadWrite, Category = "WebSocket")
 		int32 PlayerCount;
