@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "Engine/GameInstance.h"
 #include "IWebSocket.h"
+#include "../../../../../../../../../../Program Files/Epic Games/UE_5.3/Engine/Source/Runtime/Core/Public/Containers/Map.h"
 #include "Components/TextBlock.h"
 #include "GGJ_GameInstance.generated.h"
 
@@ -155,6 +156,7 @@ DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnImprovStart, FPlayerImprovMessage
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnFinalScoreSubmitted, int32, TotalScore);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnPlayerSubmittedJob, FString, PlayerId);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnTimerEnd);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnGameFinished);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnPlayersSubmittedJobs);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnPlayersSubmittedExperience);
 
@@ -175,6 +177,9 @@ class GGJ_GAME_API UGGJ_GameInstance : public UGameInstance
 		UFUNCTION(BlueprintCallable, Category = "WebSocket")
 		void RequestStartGame();
 
+		UFUNCTION(BlueprintCallable)
+		TArray<FString> GetPlayersBySalary();
+
 		UPROPERTY(BlueprintAssignable, Category = "WebSocket")
 		FOnPlayerCountUpdate PlayerCountUpdated;
 
@@ -184,6 +189,10 @@ class GGJ_GAME_API UGGJ_GameInstance : public UGameInstance
 
 		UPROPERTY(BlueprintAssignable, Category = "WebSocket")
 		FOnTimerEnd TimerEnd;
+
+		//weird name to prevent name conflict
+		UPROPERTY(BlueprintAssignable, Category = "WebSocket")
+		FOnGameFinished GameJustFinished;
 
 		UPROPERTY(BlueprintAssignable, Category = "WebSocket")
 		FOnLobbyCodeRecieved LobbyCodeRecieved;
@@ -216,7 +225,11 @@ class GGJ_GAME_API UGGJ_GameInstance : public UGameInstance
 		TMap<FString, FString> CurrentPlayers;
 
 		UPROPERTY(BlueprintReadWrite, Category = "WebSocket")
+		TMap<FString, int> Salaries;
+
+		UPROPERTY(BlueprintReadWrite, Category = "WebSocket")
 		bool ImprovStarted = false;
+		
 
 	private:
 		TSharedPtr<IWebSocket> WebSocket;

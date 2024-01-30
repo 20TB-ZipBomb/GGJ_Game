@@ -26,6 +26,7 @@ namespace
 	const FString PlayerExpSubmittingFinished{ "player_exp_submitting_finished" };
 	const FString PlayerImprovStart{ "player_improv_start" };
 	const FString InterceptCardData { "intercept_card_data" };
+	const FString GameFinished { "game_finished" };
 	
 	
 
@@ -143,7 +144,7 @@ void UGGJ_GameInstance::OnStartGame()
 
 				FScoreSubmission playerScoreSubmitted;
 				FJsonObjectConverter::JsonObjectStringToUStruct(Message, &playerScoreSubmitted, 0, 0, false);
-
+				
 				FinalScoreSubmitted.Broadcast(playerScoreSubmitted.score_in_cents);
 
 			}
@@ -160,8 +161,7 @@ void UGGJ_GameInstance::OnStartGame()
 			}
 			else if ( messageType.Equals( PlayerExpSubmittingFinished ) )
 			{
-
-
+				UE_LOG(LogTemp, Error, TEXT( "Unused message" ) );
 			}
 			else if (messageType.Equals( PlayerImprovStart ))
 			{
@@ -179,6 +179,10 @@ void UGGJ_GameInstance::OnStartGame()
 				FCardIntercept interceptMessage;
 				FJsonObjectConverter::JsonObjectStringToUStruct( Message, &interceptMessage, 0, 0, false );
 				CardReceived.Broadcast(interceptMessage.intercepted_card.job_text, interceptMessage.job_time_in_seconds);
+			}
+			else if(messageType.Equals(GameFinished))
+			{
+				GameJustFinished.Broadcast();
 			}
 			else
 			{
@@ -209,6 +213,17 @@ void UGGJ_GameInstance::RequestStartGame()
 	WebSocket->Send( *JsonString );
 
 	// TODO Change scene or whatever
+}
+
+//Returns a sorted array of player ids in descending order of Salary
+TArray<FString> UGGJ_GameInstance::GetPlayersBySalary()
+{
+	TArray<FString> res;
+	Salaries.ValueSort([](int32 A, int32 B) {
+		return A > B; // sort strings by length
+	});
+	CurrentPlayers.GenerateKeyArray(res);
+	return res;
 }
 
 void UGGJ_GameInstance::Shutdown()
