@@ -178,7 +178,7 @@ void UGGJ_GameInstance::OnStartGame()
 			{
 				FCardIntercept interceptMessage;
 				FJsonObjectConverter::JsonObjectStringToUStruct( Message, &interceptMessage, 0, 0, false );
-				CardReceived.Broadcast(interceptMessage.intercepted_card.job_text, interceptMessage.job_time_in_seconds);
+				CardReceived.Broadcast(interceptMessage.intercepted_card.job_text, interceptMessage.time_in_seconds);
 			}
 			else if(messageType.Equals(GameFinished))
 			{

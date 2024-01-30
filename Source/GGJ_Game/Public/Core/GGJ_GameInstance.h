@@ -140,7 +140,7 @@ struct FCardIntercept
 	FCardMessage intercepted_card;
 
 	UPROPERTY(BlueprintReadWrite)
-	int job_time_in_seconds;
+	int32 time_in_seconds;
 };
 
 #pragma endregion
