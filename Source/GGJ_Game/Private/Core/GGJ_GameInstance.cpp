@@ -220,7 +220,7 @@ TArray<FString> UGGJ_GameInstance::GetPlayersBySalary()
 {
 	TArray<FString> res;
 	Salaries.ValueSort([](int32 A, int32 B) {
-		return A > B; // sort strings by length
+		return A < B;
 	});
 	CurrentPlayers.GenerateKeyArray(res);
 	return res;
