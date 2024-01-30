@@ -25,6 +25,7 @@ namespace
 	const FString PlayerJobSubmittingFinished{ "player_job_submitting_finished" };
 	const FString PlayerExpSubmittingFinished{ "player_exp_submitting_finished" };
 	const FString PlayerImprovStart{ "player_improv_start" };
+	const FString InterceptCardData { "intercept_card_data" };
 	
 	
 
@@ -173,6 +174,11 @@ void UGGJ_GameInstance::OnStartGame()
 				FTimerFinished TimeFinish;
 				FJsonObjectConverter::JsonObjectStringToUStruct(Message, &TimeFinish, 0, 0, false);
 				TimerEnd.Broadcast();
+			} else if(messageType.Equals(InterceptCardData))
+			{
+				FCardIntercept interceptMessage;
+				FJsonObjectConverter::JsonObjectStringToUStruct( Message, &interceptMessage, 0, 0, false );
+				CardReceived.Broadcast(interceptMessage.intercepted_card.job_text, interceptMessage.job_time_in_seconds);
 			}
 			else
 			{

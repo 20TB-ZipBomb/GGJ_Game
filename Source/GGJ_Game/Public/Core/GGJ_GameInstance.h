@@ -124,17 +124,35 @@ struct FPlayerImprovMessage
 	int32 time_in_seconds;
 };
 
+USTRUCT(BlueprintType, Blueprintable)
+struct FCardIntercept
+{
+	GENERATED_BODY()
+	
+	UPROPERTY(BlueprintReadWrite)
+	FString message_type;
+
+	UPROPERTY(BlueprintReadWrite)
+	FString player_id;
+
+	UPROPERTY(BlueprintReadWrite)
+	FCardMessage intercepted_card;
+
+	UPROPERTY(BlueprintReadWrite)
+	int job_time_in_seconds;
+};
+
 #pragma endregion
 
 /**
  * 
  */
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnCardReceived, FString, JobTitle, int, TimeExtension);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnPlayerJoin, FString, PlayerId, FString, PlayerName);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnPlayerCountUpdate, int32, PlayerCount);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnLobbyCodeRecieved, int32, LobbyCode);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnImprovStart, FPlayerImprovMessage, ImprovMessage);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnFinalScoreSubmitted, int32, TotalScore);
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnCardReceived, FString, JobTitle);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnPlayerSubmittedJob, FString, PlayerId);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnTimerEnd);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnPlayersSubmittedJobs);
