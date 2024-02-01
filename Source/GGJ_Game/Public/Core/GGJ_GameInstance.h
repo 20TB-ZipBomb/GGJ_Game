@@ -143,6 +143,19 @@ struct FCardIntercept
 	int32 time_in_seconds;
 };
 
+USTRUCT(BlueprintType, Blueprintable)
+struct FPlayerIdMessage
+{
+	GENERATED_BODY()
+	
+	UPROPERTY(BlueprintReadWrite)
+	FString message_type;
+
+	UPROPERTY(BlueprintReadWrite)
+	FString player_id;
+};
+
+
 #pragma endregion
 
 /**
@@ -214,6 +227,9 @@ class GGJ_GAME_API UGGJ_GameInstance : public UGameInstance
 
 		UPROPERTY(BlueprintAssignable, Category = "WebSocket")
 		FOnCardReceived CardReceived;
+
+		UPROPERTY(BlueprintAssignable, Category = "WebSocket")
+		FOnPlayerSubmittedJob PlayerIdReceived;
 
 		UPROPERTY(BlueprintReadWrite, Category = "WebSocket")
 		int32 PlayerCount;

@@ -27,6 +27,7 @@ namespace
 	const FString PlayerImprovStart{ "player_improv_start" };
 	const FString InterceptCardData { "intercept_card_data" };
 	const FString GameFinished { "game_finished" };
+	const FString PlayerID{"player_id"};
 	
 	
 
@@ -184,6 +185,12 @@ void UGGJ_GameInstance::OnStartGame()
 			{
 				GameJustFinished.Broadcast();
 			}
+			else if(messageType.Equals(PlayerID))
+			{
+				FPlayerIdMessage playerIdMessage;
+				FJsonObjectConverter::JsonObjectStringToUStruct( Message, &playerIdMessage, 0, 0, false );
+				PlayerIdReceived.Broadcast(playerIdMessage.player_id);
+			} 
 			else
 			{
 				UE_LOG(LogTemp, Error, TEXT( "Client doesn't know what %s is lol" ), *messageType );
