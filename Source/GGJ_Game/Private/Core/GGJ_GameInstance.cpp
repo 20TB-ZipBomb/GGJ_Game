@@ -225,11 +225,12 @@ void UGGJ_GameInstance::RequestStartGame()
 //Returns a sorted array of player ids in descending order of Salary
 TArray<FString> UGGJ_GameInstance::GetPlayersBySalary()
 {
+	//We pray to the omnissiah that this method never breaks again
 	TArray<FString> res;
 	Salaries.ValueSort([](int32 A, int32 B) {
-		return A < B;
+		return A > B;
 	});
-	CurrentPlayers.GenerateKeyArray(res);
+	Salaries.GenerateKeyArray(res);
 	return res;
 }
 
