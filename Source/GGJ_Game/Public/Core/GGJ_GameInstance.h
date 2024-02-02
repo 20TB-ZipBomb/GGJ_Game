@@ -116,10 +116,10 @@ struct FPlayerImprovMessage
 	FString player_id;
 
 	UPROPERTY(BlueprintReadWrite)
-	FCardMessage SelectedCard;
+	FCardMessage selected_card;
 
 	UPROPERTY(BlueprintReadWrite)
-	FCardMessage JobCard;
+	FCardMessage job_card;
 
 	UPROPERTY(BlueprintReadWrite)
 	int32 time_in_seconds;
