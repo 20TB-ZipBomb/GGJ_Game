@@ -5,8 +5,7 @@
 #include "CoreMinimal.h"
 #include "Engine/GameInstance.h"
 #include "IWebSocket.h"
-#include "../../../../../../../../../../Program Files/Epic Games/UE_5.3/Engine/Source/Runtime/Core/Public/Containers/Map.h"
-#include "Components/TextBlock.h"
+#include "Containers/Map.h"
 #include "GGJ_GameInstance.generated.h"
 
 #pragma region Structs
