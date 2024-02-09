@@ -8,7 +8,12 @@
 
 namespace
 {
-	const FString WebSocketURL{ "ws://127.0.0.1:4040/connect" };
+	
+	#if UE_BUILD_DEVELOPMENT || WITH_EDITOR || UE_BUILD_DEBUG || UE_BUILD_DEBUGGAME
+		const FString WebSocketURL{ "ws://localhost:4040/connect" };
+	#else
+		const FString WebSocketURL{ "wss://ggjp-cc95dfe6cb29.herokuapp.com/connect" };
+	#endif
 	const FString MessageTypeString{ "message_type" };
 
 	// Send
