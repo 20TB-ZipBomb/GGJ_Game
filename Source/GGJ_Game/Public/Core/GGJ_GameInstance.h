@@ -171,6 +171,7 @@ DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnTimerEnd);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnGameFinished);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnPlayersSubmittedJobs);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnPlayersSubmittedExperience);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnScreenChanged);
 
 UCLASS()
 class GGJ_GAME_API UGGJ_GameInstance : public UGameInstance
@@ -188,6 +189,10 @@ class GGJ_GAME_API UGGJ_GameInstance : public UGameInstance
 	
 		UFUNCTION(BlueprintCallable, Category = "WebSocket")
 		void RequestStartGame();
+
+		//TODO: Refactor this UI logic to somewhere more reasonable
+		UFUNCTION(BlueprintCallable)
+		void PlayScreenTransition();
 
 		UFUNCTION(BlueprintCallable)
 		TArray<FString> GetPlayersBySalary();
@@ -220,6 +225,9 @@ class GGJ_GAME_API UGGJ_GameInstance : public UGameInstance
 
 		UPROPERTY(BlueprintAssignable, Category = "WebSocket")
 		FOnFinalScoreSubmitted FinalScoreSubmitted;
+
+		UPROPERTY(BlueprintAssignable)
+		FOnScreenChanged ScreenChanged;
 
 		UPROPERTY(BlueprintAssignable, Category = "WebSocket")
 		FOnImprovStart ImprovStart;

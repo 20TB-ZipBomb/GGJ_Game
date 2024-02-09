@@ -227,6 +227,11 @@ void UGGJ_GameInstance::RequestStartGame()
 	// TODO Change scene or whatever
 }
 
+void UGGJ_GameInstance::PlayScreenTransition()
+{
+	ScreenChanged.Broadcast();
+}
+
 //Returns a sorted array of player ids in descending order of Salary
 TArray<FString> UGGJ_GameInstance::GetPlayersBySalary()
 {
