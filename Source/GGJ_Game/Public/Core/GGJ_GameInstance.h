@@ -173,7 +173,7 @@ DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnPlayersSubmittedJobs);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnPlayersSubmittedExperience);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnScreenChanged);
 
-UCLASS()
+UCLASS(Config=Game)
 class GGJ_GAME_API UGGJ_GameInstance : public UGameInstance
 {
 	GENERATED_BODY()
@@ -252,8 +252,10 @@ class GGJ_GAME_API UGGJ_GameInstance : public UGameInstance
 
 		UPROPERTY(BlueprintReadWrite, Category = "WebSocket")
 		bool ImprovStarted = false;
-		
 
+		UPROPERTY(Config)
+		FString WebSocketURL;
+	
 	private:
 		TSharedPtr<IWebSocket> WebSocket;
 };

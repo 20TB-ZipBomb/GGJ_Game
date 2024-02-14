@@ -8,12 +8,6 @@
 
 namespace
 {
-	
-	#if UE_BUILD_DEVELOPMENT || WITH_EDITOR || UE_BUILD_DEBUG || UE_BUILD_DEBUGGAME
-		const FString WebSocketURL{ "ws://localhost:4040/connect" };
-	#else
-		const FString WebSocketURL{ "wss://ggjp-cc95dfe6cb29.herokuapp.com/connect" };
-	#endif
 	const FString MessageTypeString{ "message_type" };
 
 	// Send
@@ -50,11 +44,11 @@ void UGGJ_GameInstance::Init()
 
 void UGGJ_GameInstance::OnStartGame()
 {
-
+	WebSocketURL = WebSocketURL.Replace(TEXT("\\"), TEXT("/"));
 	WebSocket = FWebSocketsModule::Get().CreateWebSocket(WebSocketURL);
 
 	GEngine->AddOnScreenDebugMessage(-1, -15.0f, FColor::Green, "Successfully connected");
-	UE_LOG(LogTemp, Warning, TEXT("Hello World!"));
+	UE_LOG(LogTemp, Warning, TEXT("Hello World! %s"), *WebSocketURL);
 
 
 	//Runs whenever the websocket is connected to. Attach to the 'OnConnected' event
